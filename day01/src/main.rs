@@ -1,6 +1,7 @@
 use std::io::{self, Read};
 
-type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
+type Error = Box<dyn std::error::Error + Send + Sync>;
+type Result<T, E = Error> = std::result::Result<T, E>;
 
 fn calc_fuel(mass: i64) -> i64 {
 	mass / 3 - 2
