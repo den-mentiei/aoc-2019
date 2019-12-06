@@ -1,7 +1,3 @@
-#![allow(dead_code)]
-#![allow(unused_mut)]
-#![allow(unused_variables)]
-
 use std::io::{self, Read};
 
 type Error = Box<dyn std::error::Error + Send + Sync>;
@@ -264,7 +260,7 @@ mod tests {
 	fn example2() {
 		let mut ram = parse(&"1101,100,-1,4,0").unwrap();
 		let input = [];
-		let output = execute(&input, &mut ram);
+		let _ = execute(&input, &mut ram);
 		assert_eq!(ram[4], 100 + -1);
 	}
 
