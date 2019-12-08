@@ -3,6 +3,38 @@ use std::io::{self, Read};
 type Error = Box<dyn std::error::Error>;
 type Result<T, E = Error> = std::result::Result<T, E>;
 
+fn main() -> Result<()> {
+	let mut input = String::new();
+	io::stdin().read_to_string(&mut input)?;
+
+	let initial = parse(&input)?;
+	let mut ram = initial.clone();
+	
+	ram[1] = 12;
+	ram[2] = 2;
+	execute(&mut ram);
+
+	println!("first -> {}", ram[0]);
+
+	for noun in 0..100 {
+		for verb in 0..100 {
+			ram.copy_from_slice(&initial);
+
+			ram[1] = noun;
+			ram[2] = verb;
+
+			execute(&mut ram);
+
+			if ram[0] == 19690720 {
+				println!("second -> {}", 100 * noun + verb);
+				return Ok(())
+			}
+		}
+	}
+	
+	Ok(())
+}
+
 fn parse(input: &String) -> Result<Box<[usize]>> {
 	let ram: Vec<usize> = input
 		.trim()
@@ -36,38 +68,6 @@ fn execute(ram: &mut [usize]) {
 			_ => panic!("unknown opcode"),
 		}
 	}
-}
-
-fn main() -> Result<()> {
-	let mut input = String::new();
-	io::stdin().read_to_string(&mut input)?;
-
-	let initial = parse(&input)?;
-	let mut ram = initial.clone();
-	
-	ram[1] = 12;
-	ram[2] = 2;
-	execute(&mut ram);
-
-	println!("first -> {}", ram[0]);
-
-	for noun in 0..100 {
-		for verb in 0..100 {
-			ram.copy_from_slice(&initial);
-
-			ram[1] = noun;
-			ram[2] = verb;
-
-			execute(&mut ram);
-
-			if ram[0] == 19690720 {
-				println!("second -> {}", 100 * noun + verb);
-				return Ok(())
-			}
-		}
-	}
-	
-	Ok(())
 }
 
 #[cfg(test)]
